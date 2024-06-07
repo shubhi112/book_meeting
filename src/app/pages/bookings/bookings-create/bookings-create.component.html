@@ -1,0 +1,21 @@
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
+<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '100vh' }"
+    [draggable]="false" [resizable]="false">
+
+    <form [formGroup]="bookingForm" (ngSubmit)="createBooking()">
+        <div>
+            <input type="text" pInputText formControlName="username" placeholder="Username" />
+        </div>
+        <p-calendar formControlName="date"></p-calendar>
+        <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+        <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+
+        <div> <input type="text" pInputText formControlName="agenda" placeholder="Agenda" /></div>
+        <div> <input type="text" pInputText formControlName="roomNo" placeholder="Roomno" /></div>
+        <div style="text-align:center;">
+            <p-button [disabled]="bookingForm.invalid" type="submit" class="btn btn-style">
+                Book Meeting</p-button>
+        </div>
+    </form>
+
+</p-dialog>

@@ -10,11 +10,18 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MenubarModule } from 'primeng/menubar';
+import { DialogModule } from 'primeng/dialog';
+import { BookingsComponent } from './pages/bookings/bookings.component';
+import { BookingsCreateComponent } from './pages/bookings/bookings-create/bookings-create.component';
+import { BookingsDetailsComponent } from './pages/bookings/bookings-details/bookings-details.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    NavbarComponent
+    NavbarComponent,
+    BookingsComponent,
+    BookingsCreateComponent,
+    BookingsDetailsComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -25,7 +32,8 @@ import { MenubarModule } from 'primeng/menubar';
     FormsModule,
     CalendarModule,
     InputTextModule,
-    MenubarModule
+    MenubarModule,
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       console.log(this.loginForm.value)
       if (this.authService.login(username, password)) {
         console.log("yes")
-        // this.router.navigate(['/booking']);
+        this.router.navigate(['/booking']);
       } else {
         console.log("Failed to login")
       }
