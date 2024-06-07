@@ -1,0 +1,11 @@
+<h2>Login</h2>
+<div>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <input type="text" pInputText formControlName="username" placeholder="Username" />
+        <input type="text" pInputText formControlName="password" placeholder="Password" />
+        <div style="text-align:center;">
+            <p-button [disabled]="loginForm.invalid" type="submit" class="btn btn-style">
+                Login</p-button>
+        </div>
+    </form>
+</div>
