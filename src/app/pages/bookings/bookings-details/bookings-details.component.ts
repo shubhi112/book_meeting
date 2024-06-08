@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BookingService } from 'src/app/services/booking.service';
 
 @Component({
   selector: 'app-bookings-details',
   templateUrl: './bookings-details.component.html',
   styleUrls: ['./bookings-details.component.css']
 })
-export class BookingsDetailsComponent {
-  bookings!: [{
-    id: 1,
-    username: "Shubhi",
-    agenda: "Do some work",
-    date: "9 June 2024",
-    startTime: '1:30',
-    endTime: '2:00'
-    roomNo: 2
-  }]
+export class BookingsDetailsComponent implements OnInit {
+  bookings: any[] = [];
+
+  constructor(private bookingService: BookingService) { }
+
+  ngOnInit(): void {
+    this.bookingService.getBookings().subscribe(bookings => {
+      this.bookings = bookings;
+    });
+  }
 }

@@ -17,6 +17,9 @@ import { BookingsDetailsComponent } from './pages/bookings/bookings-details/book
 import { TableModule } from 'primeng/table';
 import { RoomBookingsDetailsComponent } from './pages/bookings/room-bookings-details/room-bookings-details.component';
 import { CardModule } from 'primeng/card';
+import { HttpClientModule } from '@angular/common/http';
+import { DropdownModule } from 'primeng/dropdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,9 @@ import { CardModule } from 'primeng/card';
     MenubarModule,
     DialogModule,
     TableModule,
-    CardModule
+    CardModule,
+    HttpClientModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

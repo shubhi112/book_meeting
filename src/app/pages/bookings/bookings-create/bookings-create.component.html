@@ -1,17 +1,38 @@
-<p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="New Booking"></p-button>
 <p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '100vh' }"
     [draggable]="false" [resizable]="false">
 
     <form [formGroup]="bookingForm" (ngSubmit)="createBooking()">
         <div>
             <input type="text" pInputText formControlName="username" placeholder="Username" />
+            <div *ngIf="bookingForm.get('username')?.invalid && bookingForm.get('username')?.touched">
+                Username is required.
+            </div>
         </div>
-        <p-calendar formControlName="date"></p-calendar>
-        <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+        <div>
+            <p-calendar formControlName="date"></p-calendar>
+            <div *ngIf="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched">
+                Date is required.
+            </div>
+        </div>
+        <div>
+            <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+            <div *ngIf="bookingForm.get('startTime')?.invalid && bookingForm.get('startTime')?.touched">
+                Start Time is required.
+            </div>
+        </div>
         <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"></p-calendar>
 
-        <div> <input type="text" pInputText formControlName="agenda" placeholder="Agenda" /></div>
-        <div> <input type="text" pInputText formControlName="roomNo" placeholder="Roomno" /></div>
+        <div> <input type="text" pInputText formControlName="agenda" placeholder="Agenda" />
+            <div *ngIf="bookingForm.get('startTime')?.invalid && bookingForm.get('startTime')?.touched">
+                Agenda is required.
+            </div>
+        </div>
+        <div> <p-dropdown formControlName="roomNo" [options]="rooms" placeholder="Select Meeting Room"></p-dropdown>
+            <div *ngIf="bookingForm.get('meetingRoom')?.invalid && bookingForm.get('meetingRoom')?.touched">
+                Meeting Room is required.
+            </div>
+        </div>
         <div style="text-align:center;">
             <p-button [disabled]="bookingForm.invalid" type="submit" class="btn btn-style">
                 Book Meeting</p-button>
