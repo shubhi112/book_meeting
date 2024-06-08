@@ -1,1 +1,22 @@
-<p>bookings-details works!</p>
+<p-table [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Sr No.</th>
+            <th>Username</th>
+            <th>Agenda</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Room</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-booking>
+        <tr>
+            <td>{{ booking.id }}</td>
+            <td>{{ booking.username }}</td>
+            <td>{{ booking.agenda }}</td>
+            <td>{{ booking.date }}</td>
+            <td>{{ booking.startTime - booking.endTime }}</td>
+            <td>{{ booking.roomNo }}</td>
+        </tr>
+    </ng-template>
+</p-table>

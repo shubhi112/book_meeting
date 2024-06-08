@@ -14,6 +14,9 @@ import { DialogModule } from 'primeng/dialog';
 import { BookingsComponent } from './pages/bookings/bookings.component';
 import { BookingsCreateComponent } from './pages/bookings/bookings-create/bookings-create.component';
 import { BookingsDetailsComponent } from './pages/bookings/bookings-details/bookings-details.component';
+import { TableModule } from 'primeng/table';
+import { RoomBookingsDetailsComponent } from './pages/bookings/room-bookings-details/room-bookings-details.component';
+import { CardModule } from 'primeng/card';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +24,8 @@ import { BookingsDetailsComponent } from './pages/bookings/bookings-details/book
     NavbarComponent,
     BookingsComponent,
     BookingsCreateComponent,
-    BookingsDetailsComponent
+    BookingsDetailsComponent,
+    RoomBookingsDetailsComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -33,7 +37,9 @@ import { BookingsDetailsComponent } from './pages/bookings/bookings-details/book
     CalendarModule,
     InputTextModule,
     MenubarModule,
-    DialogModule
+    DialogModule,
+    TableModule,
+    CardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
