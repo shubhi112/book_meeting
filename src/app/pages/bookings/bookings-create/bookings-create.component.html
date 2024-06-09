@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="availableRooms.length < 0" style="margin-top: 5px;">
+            <div *ngIf="availableRooms.length == 0" style="margin-top: 5px;">
                 No rooms available.
             </div>
         </div>
@@ -71,7 +71,10 @@
 </p-dialog>
 <div>
     <p-card header="Your Booking Details">
-        <p-table [value]="userBookings" [tableStyle]="{ 'min-width': '50rem' }">
+        <div style="text-align: center;" *ngIf="userBookings?.length == 0">
+            No bookings available. Add new booking :)
+        </div>
+        <p-table *ngIf="userBookings?.length > 0" [value]="userBookings" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Sr No.</th>
@@ -100,7 +103,10 @@
 </div>
 <div>
     <p-card header="Room Booking Details">
-        <p-table [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
+        <div style="text-align: center;" *ngIf="bookings?.length == 0">
+            No bookings available. Add new booking :)
+        </div>
+        <p-table *ngIf="bookings?.length > 0" [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Sr No.</th>
