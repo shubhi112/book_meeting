@@ -34,10 +34,16 @@
         </div>
         <div>
 
-            <div>
-                <p-dropdown formControlName="roomNo" [options]="rooms" placeholder="Select Meeting Room">
+            <button type="button" (click)="searchAvailableRooms()">Search Available Rooms</button>
+            <div *ngIf="availableRooms.length > 0">
+                <p-dropdown formControlName="roomNo" [options]="availableRooms" placeholder="Select Meeting Room">
                 </p-dropdown>
-
+                <div *ngIf="bookingForm.get('roomNo')?.invalid && bookingForm.get('roomNo')?.touched">
+                    Meeting Room is required.
+                </div>
+            </div>
+            <div *ngIf="availableRooms.length < 0">
+                No rooms available.
             </div>
 
         </div>

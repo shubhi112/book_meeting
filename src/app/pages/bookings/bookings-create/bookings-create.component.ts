@@ -13,7 +13,8 @@ export class BookingsCreateComponent {
   bookingForm!: FormGroup
   visible: boolean = false;
   bookings: any;
-  rooms = Array.from({ length: 10 }, (_, i) => i + 1);
+  //rooms = Array.from({ length: 10 }, (_, i) => i + 1);
+  availableRooms: string[] = [];
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService) { }
 
   ngOnInit(): void {
@@ -25,12 +26,25 @@ export class BookingsCreateComponent {
       roomNo: ['', Validators.required],
       agenda: ['', Validators.required]
     }, { validators: this.validateMeetingTime() })
+    this.bookingForm.get('startTime')?.valueChanges.subscribe(() => this.availableRooms = []);
+    this.bookingForm.get('endTime')?.valueChanges.subscribe(() => this.availableRooms = []);
     this.setDefaultValues();
     this.getBookings()
   }
   getBookings() {
     this.bookingService.getBookings().subscribe(bookings => {
       this.bookings = bookings;
+    });
+  }
+  searchAvailableRooms(): void {
+    const { date, startTime, endTime } = this.bookingForm.value;
+    if (!date || !startTime || !endTime) {
+      //this.error = 'Please select date, start time, and end time.';
+      return;
+    }
+    this.bookingService.getAvailableRooms(date, startTime, endTime).subscribe(rooms => {
+      this.availableRooms = rooms;
+      console.log(this.availableRooms);
     });
   }
   setDefaultValues(): void {
@@ -63,7 +77,7 @@ export class BookingsCreateComponent {
       if (startTime && endTime) {
         const start = new Date(startTime).getHours();
         const end = new Date(endTime).getHours();
-        if (start < 9 || end > 18 || (end === 18 && new Date(endTime).getMinutes() > 0)) {
+        if (start < 9 || end > 23 || (end === 23 && new Date(endTime).getMinutes() > 0)) {
           return { 'invalidTime': true };
         }
       }
@@ -78,26 +92,24 @@ export class BookingsCreateComponent {
   }
   createBooking() {
     if (this.bookingForm.valid) {
-      if (this.bookingForm.valid) {
-        const meeting = this.bookingForm.value;
-        const { date, startTime, endTime } = meeting;
-        console.log(date, startTime, endTime)
+      const meeting = this.bookingForm.value;
+      const { date, startTime, endTime, roomNo } = meeting;
+      console.log(date, startTime, endTime)
 
-        this.bookingService.isSlotAvailable(date, startTime, endTime).subscribe(available => {
-          console.log(available)
-          if (available) {
-            console.log(meeting)
-            this.bookingService.addBooking(meeting).subscribe(() => {
-              this.getBookings()
-              this.bookingForm.reset();
-              this.setDefaultValues();
-              this.visible = false;
-            });
-          } else {
-            console.log("error")
-          }
-        });
-      }
+      this.bookingService.isSlotAvailable(date, startTime, endTime, roomNo).subscribe(available => {
+        console.log(available)
+        if (available) {
+          console.log(meeting)
+          this.bookingService.addBooking(meeting).subscribe(() => {
+            this.getBookings()
+            this.bookingForm.reset();
+            this.setDefaultValues();
+            this.visible = false;
+          });
+        } else {
+          console.log("error")
+        }
+      });
     }
   }
 }

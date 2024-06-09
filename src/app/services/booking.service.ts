@@ -21,7 +21,7 @@ export class BookingService {
   deleteBooking(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/bookings/${id}`);
   }
-  isSlotAvailable(date: any, startTime: any, endTime: any): Observable<boolean> {
+  isSlotAvailable(date: any, startTime: any, endTime: any, roomNo: string): Observable<boolean> {
     return this.getBookings().pipe(
       map(bookings => {
         const parseDateTime = (dateTimeStr: string): number => {
@@ -35,15 +35,13 @@ export class BookingService {
         const startOfDay = new Date(date);
         startOfDay.setHours(9, 0, 0, 0);
         const endOfDay = new Date(date);
-        endOfDay.setHours(18, 0, 0, 0);
+        endOfDay.setHours(23, 0, 0, 0);
 
         if (bookings.length === 0) {
           return requestedStartTime >= startOfDay.getTime() && requestedEndTime <= endOfDay.getTime();
         }
 
-        const bookingsForDate = bookings
-          .filter(booking => new Date(booking.date).toDateString() === new Date(date).toDateString())
-          .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+        const bookingsForDate = bookings.filter(booking => booking.roomNo == roomNo).sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
         if (bookingsForDate.length === 0) {
           return requestedStartTime >= startOfDay.getTime() && requestedEndTime <= endOfDay.getTime();
@@ -74,6 +72,28 @@ export class BookingService {
         }
 
         return false;
+      })
+    );
+  }
+  getAvailableRooms(date: any, startTime: any, endTime: any): Observable<any> {
+    const rooms = ["Room1", "Room2", "Room3"];
+    const parseDateTime = (dateTimeStr: string): number => {
+      return new Date(dateTimeStr).getTime();
+    };
+    return this.getBookings().pipe(
+      map(bookings => {
+        return rooms.filter(room => {
+          return bookings.every(booking => {
+            if (booking.roomNo == room) {
+              const bookingStartTime = new Date(booking.startTime).getTime();
+              const bookingEndTime = new Date(booking.endTime).getTime();
+              const requestedStartTime = parseDateTime(startTime);
+              const requestedEndTime = parseDateTime(endTime);
+              return requestedStartTime >= bookingEndTime || requestedEndTime <= bookingStartTime;
+            }
+            return true;
+          });
+        });
       })
     );
   }
