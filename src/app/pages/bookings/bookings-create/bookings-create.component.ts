@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookingService } from 'src/app/services/booking.service';
 
@@ -13,9 +14,8 @@ export class BookingsCreateComponent {
   bookingForm!: FormGroup
   visible: boolean = false;
   bookings: any;
-  //rooms = Array.from({ length: 10 }, (_, i) => i + 1);
   availableRooms: string[] = [];
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
@@ -31,15 +31,14 @@ export class BookingsCreateComponent {
     this.setDefaultValues();
     this.getBookings()
   }
-  getBookings() {
+  getBookings() { //get all bookings
     this.bookingService.getBookings().subscribe(bookings => {
       this.bookings = bookings;
     });
   }
-  searchAvailableRooms(): void {
+  searchAvailableRooms(): void { // to search the availability of rooms
     const { date, startTime, endTime } = this.bookingForm.value;
     if (!date || !startTime || !endTime) {
-      //this.error = 'Please select date, start time, and end time.';
       return;
     }
     this.bookingService.getAvailableRooms(date, startTime, endTime).subscribe(rooms => {
@@ -47,7 +46,7 @@ export class BookingsCreateComponent {
       console.log(this.availableRooms);
     });
   }
-  setDefaultValues(): void {
+  setDefaultValues(): void {  // set default values of time on the form
     const now = new Date();
     this.bookingForm.patchValue({
       date: now,
@@ -84,7 +83,7 @@ export class BookingsCreateComponent {
       return null;
     };
   }
-  formatTime(date: Date): string {
+  formatTime(date: Date): string { // get time in correct format
     return `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
   }
   showDialog() {
@@ -96,6 +95,7 @@ export class BookingsCreateComponent {
         this.getBookings();
       });
     }
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Deleted successfully!' });
   }
   createBooking() {
     if (this.bookingForm.valid) {
@@ -112,9 +112,10 @@ export class BookingsCreateComponent {
             this.bookingForm.reset();
             this.setDefaultValues();
             this.visible = false;
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Meeting added successfully' });
           });
         } else {
-          console.log("error")
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some error occurred!' });
         }
       });
     }

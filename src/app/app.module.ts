@@ -20,6 +20,9 @@ import { CardModule } from 'primeng/card';
 import { HttpClientModule } from '@angular/common/http';
 import { DropdownModule } from 'primeng/dropdown';
 import { TimeFormatPipe } from './shared/time-format.pipe';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 @NgModule({
   declarations: [
@@ -46,9 +49,10 @@ import { TimeFormatPipe } from './shared/time-format.pipe';
     TableModule,
     CardModule,
     HttpClientModule,
-    DropdownModule
+    DropdownModule,
+    ToastModule
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

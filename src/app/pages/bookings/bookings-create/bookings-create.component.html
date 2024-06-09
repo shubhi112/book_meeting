@@ -1,5 +1,6 @@
 <p-button (click)="showDialog()" icon="pi pi-external-link" label="New Booking"
     [style]="{ marginTop: '20px', marginBottom: '20px'}"></p-button>
+<p-toast></p-toast>
 <p-dialog header="New Booking" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '100vh'}"
     [draggable]="false" [resizable]="false">
     <form [formGroup]="bookingForm" (ngSubmit)="createBooking()" style="margin-bottom: 10px;">
