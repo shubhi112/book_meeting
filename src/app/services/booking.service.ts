@@ -1,38 +1,93 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { Booking } from '../shared/models/Booking';
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
   private apiUrl = 'http://localhost:3000';
-  private bookingsSubject: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([]);
-  public bookings$: Observable<Booking[]> = this.bookingsSubject.asObservable(); // Creates a new Observable with this Subject as the source (booking list k liye I created)
 
-  constructor(private http: HttpClient) {
-    this.loadMyBookings();
-  }
-
-  private loadMyBookings(): void {
-    this.http.get<Booking[]>(`${this.apiUrl}/bookings`).subscribe((bookings) => {
-      this.bookingsSubject.next(bookings);
-    });
-  }
+  constructor(private http: HttpClient) { }
 
   getBookings(): Observable<Booking[]> {
-    return this.bookings$;
+    return this.http.get<Booking[]>(`${this.apiUrl}/bookings`)
   }
 
   addBooking(booking: Booking): Observable<Booking> {
-    return this.http.post<Booking>(`${this.apiUrl}/bookings`, booking).pipe(
-      tap((newBooking) => {
-        const currentBookings = this.bookingsSubject.value;
-        this.bookingsSubject.next([...currentBookings, newBooking]);
-      })
-    );
+    const formattedBooking = this.formatBooking(booking);
+    return this.http.post<Booking>(`${this.apiUrl}/bookings`, formattedBooking)
   }
   deleteBooking(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/bookings/${id}`);
   }
+  isSlotAvailable(date: any, startTime: any, endTime: any): Observable<boolean> {
+    return this.getBookings().pipe(
+      map(bookings => {
+        const parseDateTime = (dateTimeStr: string): number => {
+          return new Date(dateTimeStr).getTime();
+        };
+
+        const requestedStartTime = parseDateTime(startTime);
+        const requestedEndTime = parseDateTime(endTime);
+        const minMeetingDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        const startOfDay = new Date(date);
+        startOfDay.setHours(9, 0, 0, 0);
+        const endOfDay = new Date(date);
+        endOfDay.setHours(18, 0, 0, 0);
+
+        if (bookings.length === 0) {
+          return requestedStartTime >= startOfDay.getTime() && requestedEndTime <= endOfDay.getTime();
+        }
+
+        const bookingsForDate = bookings
+          .filter(booking => new Date(booking.date).toDateString() === new Date(date).toDateString())
+          .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+
+        if (bookingsForDate.length === 0) {
+          return requestedStartTime >= startOfDay.getTime() && requestedEndTime <= endOfDay.getTime();
+        }
+
+        const firstMeetingStartTime = new Date(bookingsForDate[0].startTime).getTime();
+        if (requestedStartTime >= startOfDay.getTime() && requestedEndTime <= firstMeetingStartTime) {
+          if ((firstMeetingStartTime - startOfDay.getTime()) >= minMeetingDuration) {
+            return true;
+          }
+        }
+
+        for (let i = 0; i < bookingsForDate.length - 1; i++) {
+          const currentMeetingEndTime = new Date(bookingsForDate[i].endTime).getTime();
+          const nextMeetingStartTime = new Date(bookingsForDate[i + 1].startTime).getTime();
+          if (requestedStartTime >= currentMeetingEndTime && requestedEndTime <= nextMeetingStartTime) {
+            if ((nextMeetingStartTime - currentMeetingEndTime) >= minMeetingDuration) {
+              return true;
+            }
+          }
+        }
+
+        const lastMeetingEndTime = new Date(bookingsForDate[bookingsForDate.length - 1].endTime).getTime();
+        if (requestedStartTime >= lastMeetingEndTime && requestedEndTime <= endOfDay.getTime()) {
+          if ((endOfDay.getTime() - lastMeetingEndTime) >= minMeetingDuration) {
+            return true;
+          }
+        }
+
+        return false;
+      })
+    );
+  }
+
+  private formatBooking(booking: Booking): Booking {
+    return {
+      ...booking,
+      date: this.formatDateTime(new Date(booking.date)),
+      startTime: this.formatDateTime(new Date(booking.startTime)),
+      endTime: this.formatDateTime(new Date(booking.endTime)),
+    };
+  }
+  private formatDateTime(date: Date): string {
+    return date.toString(); // e.g., "Sun Jun 09 2024 15:09:09 GMT+0530 (India Standard Time)"
+  }
 }
+

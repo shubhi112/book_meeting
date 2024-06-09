@@ -1,8 +1,8 @@
 export class Booking {
     username!: string
-    date!: Date
-    startTime!: string
-    endTime!: string
-    roomNo!: number
+    date!: any
+    startTime!: any
+    endTime!: any
+    roomNo!: string
     agenda!: string
 }
