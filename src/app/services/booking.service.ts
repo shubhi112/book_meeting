@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Booking } from '../shared/models/Booking';
 @Injectable({
   providedIn: 'root'
