@@ -35,7 +35,7 @@ export class BookingService {
         const startOfDay = new Date(date);
         startOfDay.setHours(9, 0, 0, 0);
         const endOfDay = new Date(date);
-        endOfDay.setHours(23, 0, 0, 0);
+        endOfDay.setHours(18, 0, 0, 0);
 
         if (bookings.length === 0) {
           return requestedStartTime >= startOfDay.getTime() && requestedEndTime <= endOfDay.getTime();

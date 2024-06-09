@@ -1,0 +1,17 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+
+}
+
+p-card {
+    width: 300px;
+
+}
+
+.form-field {
+    margin-bottom: 1rem;
+
+}

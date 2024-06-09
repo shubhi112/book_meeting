@@ -15,11 +15,15 @@ export class BookingsCreateComponent {
   visible: boolean = false;
   bookings: any;
   availableRooms: string[] = [];
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService, private messageService: MessageService) { }
+  loggedInUsername: string | null;
+  userBookings: any
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService, private messageService: MessageService) {
+    this.loggedInUsername = localStorage.getItem('username');
+  }
 
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
-      username: [localStorage.getItem('username'), Validators.required],
+      username: [this.loggedInUsername || '', Validators.required],
       date: [new Date(), Validators.required],
       startTime: [new Date(), Validators.required],
       endTime: ['', [Validators.required, this.validateMeetingDuration()]],
@@ -34,8 +38,17 @@ export class BookingsCreateComponent {
   getBookings() { //get all bookings
     this.bookingService.getBookings().subscribe(bookings => {
       this.bookings = bookings;
+      this.filterUserBookings();
     });
   }
+  filterUserBookings() {
+    if (this.loggedInUsername) {
+      this.userBookings = this.bookings.filter((booking: any) => booking.username === this.loggedInUsername);
+    } else {
+      this.userBookings = [];
+    }
+  }
+
   searchAvailableRooms(): void { // to search the availability of rooms
     const { date, startTime, endTime } = this.bookingForm.value;
     if (!date || !startTime || !endTime) {
@@ -76,7 +89,7 @@ export class BookingsCreateComponent {
       if (startTime && endTime) {
         const start = new Date(startTime).getHours();
         const end = new Date(endTime).getHours();
-        if (start < 9 || end > 23 || (end === 23 && new Date(endTime).getMinutes() > 0)) {
+        if (start < 9 || end > 18 || (end === 18 && new Date(endTime).getMinutes() > 0)) {
           return { 'invalidTime': true };
         }
       }

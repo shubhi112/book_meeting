@@ -1,13 +1,5 @@
 {
   "bookings": [
-    {
-      "username": "user1",
-      "date": "Sun Jun 09 2024 21:45:50 GMT+0530 (India Standard Time)",
-      "startTime": "Sun Jun 09 2024 21:45:50 GMT+0530 (India Standard Time)",
-      "endTime": "Sun Jun 09 2024 22:15:50 GMT+0530 (India Standard Time)",
-      "roomNo": "Room1",
-      "agenda": "srewr",
-      "id": 1
-    }
+  
   ]
 }

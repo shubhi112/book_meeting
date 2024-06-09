@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-
   username: any
   constructor(private router: Router) {
     this.username = localStorage.getItem('username');
@@ -16,10 +15,8 @@ export class NavbarComponent {
   ngOnInit() {
   }
   logout() {
-    // Clear user session
     localStorage.removeItem('username');
     localStorage.removeItem('password');
     this.router.navigate(['/']);
-    // Perform any other logout actions if needed, e.g., redirect to login page
   }
 }
