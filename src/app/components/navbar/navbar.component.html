@@ -1,3 +1,15 @@
 <div class="card">
-    <p-menubar [model]="items"></p-menubar>
+
+
+    <p-menubar>
+        <ng-template pTemplate="start">
+            {{username}}
+        </ng-template>
+        <ng-template pTemplate="end">
+            <p-button label="Log Out" (click)="logout()"></p-button>
+        </ng-template>
+        <span>
+
+        </span>
+    </p-menubar>
 </div>

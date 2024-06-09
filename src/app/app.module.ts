@@ -19,6 +19,7 @@ import { RoomBookingsDetailsComponent } from './pages/bookings/room-bookings-det
 import { CardModule } from 'primeng/card';
 import { HttpClientModule } from '@angular/common/http';
 import { DropdownModule } from 'primeng/dropdown';
+import { TimeFormatPipe } from './shared/time-format.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { DropdownModule } from 'primeng/dropdown';
     BookingsComponent,
     BookingsCreateComponent,
     BookingsDetailsComponent,
-    RoomBookingsDetailsComponent
+    RoomBookingsDetailsComponent,
+    TimeFormatPipe
   ],
   imports: [
     BrowserAnimationsModule,

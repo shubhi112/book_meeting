@@ -6,13 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./room-bookings-details.component.css']
 })
 export class RoomBookingsDetailsComponent {
-  bookings!: [{
-    id: 1,
-    username: "Shubhi",
-    agenda: "Do some work",
-    date: "9 June 2024",
-    startTime: '1:30',
-    endTime: '2:00'
-    roomNo: 2
-  }]
+
 }

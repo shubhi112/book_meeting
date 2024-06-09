@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-navbar',
@@ -7,14 +8,18 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  items: MenuItem[] | undefined;
 
+  username: any
+  constructor(private router: Router) {
+    this.username = localStorage.getItem('username');
+  }
   ngOnInit() {
-    this.items = [
-      {
-        label: 'Log Out',
-        icon: 'pi pi-fw pi-power-off'
-      }
-    ];
+  }
+  logout() {
+    // Clear user session
+    localStorage.removeItem('username');
+    localStorage.removeItem('password');
+    this.router.navigate(['/']);
+    // Perform any other logout actions if needed, e.g., redirect to login page
   }
 }

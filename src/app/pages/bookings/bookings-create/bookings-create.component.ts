@@ -19,7 +19,7 @@ export class BookingsCreateComponent {
 
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
-      username: ['', Validators.required],
+      username: [localStorage.getItem('username'), Validators.required],
       date: [new Date(), Validators.required],
       startTime: [new Date(), Validators.required],
       endTime: ['', [Validators.required, this.validateMeetingDuration()]],
@@ -89,6 +89,13 @@ export class BookingsCreateComponent {
   }
   showDialog() {
     this.visible = true;
+  }
+  deleteBooking(id: number) {
+    if (window.confirm('Do you really want to delete this booking?')) {
+      this.bookingService.deleteBooking(id).subscribe(() => {
+        this.getBookings();
+      });
+    }
   }
   createBooking() {
     if (this.bookingForm.valid) {

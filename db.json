@@ -1,15 +1,6 @@
 {
   "bookings": [
     {
-      "username": "sdfd",
-      "date": "Sun Jun 09 2024 20:33:59 GMT+0530 (India Standard Time)",
-      "startTime": "Sun Jun 09 2024 20:33:59 GMT+0530 (India Standard Time)",
-      "endTime": "Sun Jun 09 2024 21:03:59 GMT+0530 (India Standard Time)",
-      "roomNo": "Room1",
-      "agenda": "tret",
-      "id": 1
-    },
-    {
       "username": "rdtert",
       "date": "Sun Jun 09 2024 20:34:12 GMT+0530 (India Standard Time)",
       "startTime": "Sun Jun 09 2024 21:34:00 GMT+0530 (India Standard Time)",
@@ -17,6 +8,15 @@
       "roomNo": "Room1",
       "agenda": "tretiuyu",
       "id": 2
+    },
+    {
+      "username": "fddfg",
+      "date": "Sun Jun 09 2024 20:38:16 GMT+0530 (India Standard Time)",
+      "startTime": "Sun Jun 09 2024 20:38:16 GMT+0530 (India Standard Time)",
+      "endTime": "Sun Jun 09 2024 21:08:16 GMT+0530 (India Standard Time)",
+      "roomNo": "Room2",
+      "agenda": "gfdg",
+      "id": 3
     }
   ]
 }

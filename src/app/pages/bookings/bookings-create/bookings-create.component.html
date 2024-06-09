@@ -1,75 +1,125 @@
-<p-button (click)="showDialog()" icon="pi pi-external-link" label="New Booking"></p-button>
-<p-dialog header="New Booking" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '100vh' }"
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="New Booking"
+    [style]="{ marginTop: '20px', marginBottom: '20px'}"></p-button>
+<p-dialog header="New Booking" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '100vh'}"
     [draggable]="false" [resizable]="false">
-    <form [formGroup]="bookingForm" (ngSubmit)="createBooking()">
-        <div>
+    <form [formGroup]="bookingForm" (ngSubmit)="createBooking()" style="margin-bottom: 10px;">
+        <div style="margin-bottom: 10px;">
             <input type="text" pInputText formControlName="username" placeholder="Username" />
-            <div *ngIf="bookingForm.get('username')?.invalid && bookingForm.get('username')?.touched">
+            <div class="err-msg" *ngIf="bookingForm.get('username')?.invalid && bookingForm.get('username')?.touched"
+                style="margin-top: 5px; width: '100vw'">
                 Username is required.
             </div>
         </div>
-        <div>
-            <p-calendar formControlName="date" dateFormat="dd/mm/yy"></p-calendar>
-            <div *ngIf="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched">
+
+        <div style="margin-bottom: 10px;">
+            <div style="display: flex;">
+                <p-calendar formControlName="date" dateFormat="dd/mm/yy"></p-calendar>
+                <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+            </div>
+            <div class="err-msg" *ngIf="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched"
+                style="margin-top: 5px;">
                 Date is required.
             </div>
-        </div>
-        <div>
-            <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
-            <div *ngIf="bookingForm.get('startTime')?.invalid && bookingForm.get('startTime')?.touched">
+            <div class="err-msg" *ngIf="bookingForm.get('startTime')?.invalid && bookingForm.get('startTime')?.touched"
+                style="margin-top: 5px;">
                 Start Time is required.
             </div>
-        </div>
-        <div>
-            <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"></p-calendar>
-            <div *ngIf="bookingForm.get('endTime')?.invalid && bookingForm.get('endTime')?.touched">
+            <div class="err-msg" *ngIf="bookingForm.get('endTime')?.invalid && bookingForm.get('endTime')?.touched"
+                style="margin-top: 5px;">
                 End Time is required and should be at least 30 minutes after Start Time.
             </div>
         </div>
-        <div>
-            <input type="text" pInputText formControlName="agenda" placeholder="Agenda" />
-            <div *ngIf="bookingForm.get('agenda')?.invalid && bookingForm.get('agenda')?.touched">
-                Agenda is required.
-            </div>
-        </div>
-        <div>
 
-            <button type="button" (click)="searchAvailableRooms()">Search Available Rooms</button>
+
+
+        <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 10px;">
+
+                <p-button type="button" (click)="searchAvailableRooms()">Search Available Rooms</p-button>
+            </div>
             <div *ngIf="availableRooms.length > 0">
-                <p-dropdown formControlName="roomNo" [options]="availableRooms" placeholder="Select Meeting Room">
-                </p-dropdown>
-                <div *ngIf="bookingForm.get('roomNo')?.invalid && bookingForm.get('roomNo')?.touched">
-                    Meeting Room is required.
+                <div style="margin-bottom: 10px;">
+                    <p-dropdown formControlName="roomNo" [options]="availableRooms" placeholder="Select Meeting Room">
+                    </p-dropdown>
+                    <div class="err-msg"
+                        *ngIf="bookingForm.get('roomNo')?.invalid && bookingForm.get('roomNo')?.touched"
+                        style="margin-top: 5px;">
+                        Meeting Room is required.
+                    </div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" pInputText formControlName="agenda" placeholder="Agenda" />
+                    <div class="err-msg"
+                        *ngIf="bookingForm.get('agenda')?.invalid && bookingForm.get('agenda')?.touched"
+                        style="margin-top: 5px;">
+                        Agenda is required.
+                    </div>
                 </div>
             </div>
-            <div *ngIf="availableRooms.length < 0">
+            <div *ngIf="availableRooms.length < 0" style="margin-top: 5px;">
                 No rooms available.
             </div>
-
         </div>
-        <button pButton type="submit" label="Book Meeting"></button>
 
+        <button pButton [disabled]="bookingForm.invalid" type="submit" label="Book Meeting"
+            style="margin-top: 10px;"></button>
     </form>
+
+
 </p-dialog>
-<p-table [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Sr No.</th>
-            <th>Username</th>
-            <th>Agenda</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Room</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-booking>
-        <tr>
-            <td>{{ booking.id }}</td>
-            <td>{{ booking.username }}</td>
-            <td>{{ booking.agenda }}</td>
-            <td>{{ booking.date }}</td>
-            <td>{{ booking.startTime}} - {{ booking.endTime }}</td>
-            <td>{{ booking.roomNo }}</td>
-        </tr>
-    </ng-template>
-</p-table>
+<div>
+    <p-card header="Your Booking Details">
+        <p-table [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Username</th>
+                    <th>Agenda</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Room</th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-booking>
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td>{{ booking.username }}</td>
+                    <td>{{ booking.agenda }}</td>
+                    <td>{{ booking.date | date }}</td>
+                    <td>{{ booking.startTime | timeFormat}} - {{ booking.endTime | timeFormat }}</td>
+                    <td>{{ booking.roomNo }}</td>
+                    <td><p-button label="Delete" [text]="true" severity="danger"
+                            (click)="deleteBooking(booking.id)"></p-button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+<div>
+    <p-card header="Room Booking Details">
+        <p-table [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Username</th>
+                    <th>Agenda</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Room</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-booking>
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td>{{ booking.username }}</td>
+                    <td>{{ booking.agenda }}</td>
+                    <td>{{ booking.date | date }}</td>
+                    <td>{{ booking.startTime | timeFormat}} - {{ booking.endTime | timeFormat }}</td>
+                    <td>{{ booking.roomNo }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
