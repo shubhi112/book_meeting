@@ -5,6 +5,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 Use credentials:
 username: user1 or user2
 password: pass1 or pass2
+#Backend server
+To start json server
+json-server --watch db.json  
 
 ## Development server
 

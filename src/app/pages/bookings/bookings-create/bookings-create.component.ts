@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/booking-event.service';
 import { BookingService } from 'src/app/services/booking.service';
 
 @Component({
@@ -16,8 +15,8 @@ export class BookingsCreateComponent {
   bookings: any;
   availableRooms: string[] = [];
   loggedInUsername: string | null;
-  userBookings: any
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private bookingService: BookingService, private messageService: MessageService) {
+  minDate!: Date;
+  constructor(private fb: FormBuilder, private bookingService: BookingService, private messageService: MessageService, private eventService: EventService) {
     this.loggedInUsername = localStorage.getItem('username');
   }
 
@@ -34,19 +33,12 @@ export class BookingsCreateComponent {
     this.bookingForm.get('endTime')?.valueChanges.subscribe(() => this.availableRooms = []);
     this.setDefaultValues();
     this.getBookings()
+    this.minDate = new Date();
   }
   getBookings() { //get all bookings
     this.bookingService.getBookings().subscribe(bookings => {
       this.bookings = bookings;
-      this.filterUserBookings();
     });
-  }
-  filterUserBookings() {
-    if (this.loggedInUsername) {
-      this.userBookings = this.bookings.filter((booking: any) => booking.username === this.loggedInUsername);
-    } else {
-      this.userBookings = [];
-    }
   }
 
   searchAvailableRooms(): void { // to search the availability of rooms
@@ -56,7 +48,6 @@ export class BookingsCreateComponent {
     }
     this.bookingService.getAvailableRooms(date, startTime, endTime).subscribe(rooms => {
       this.availableRooms = rooms;
-      console.log(this.availableRooms);
     });
   }
   setDefaultValues(): void {  // set default values of time on the form
@@ -102,26 +93,17 @@ export class BookingsCreateComponent {
   showDialog() {
     this.visible = true;
   }
-  deleteBooking(id: number) {
-    if (window.confirm('Do you really want to delete this booking?')) {
-      this.bookingService.deleteBooking(id).subscribe(() => {
-        this.getBookings();
-      });
-    }
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Deleted successfully!' });
-  }
+
   createBooking() {
     if (this.bookingForm.valid) {
       const meeting = this.bookingForm.value;
       const { date, startTime, endTime, roomNo } = meeting;
-      console.log(date, startTime, endTime)
 
       this.bookingService.isSlotAvailable(date, startTime, endTime, roomNo).subscribe(available => {
-        console.log(available)
         if (available) {
-          console.log(meeting)
           this.bookingService.addBooking(meeting).subscribe(() => {
-            this.getBookings()
+            //this.getBookings()
+            this.eventService.notifyBookingAdded();
             this.bookingForm.reset();
             this.setDefaultValues();
             this.visible = false;
