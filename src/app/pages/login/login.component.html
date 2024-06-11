@@ -1,14 +1,22 @@
 <p>Use username : user1, password: pass1 or user2 and pass2 </p>
 <div class="login-container">
-
+    <p-toast></p-toast>
     <p-card>
         <h2>Login</h2>
         <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="form-field">
                 <input type="text" pInputText formControlName="username" placeholder="Username" />
+                <div class="err-msg" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+                    style="margin-top: 5px; width: '100vw'">
+                    Username is required.
+                </div>
             </div>
             <div class="form-field">
                 <input type="password" pInputText formControlName="password" placeholder="Password" />
+                <div class="err-msg" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                    style="margin-top: 5px; width: '100vw'">
+                    Password is required.
+                </div>
             </div>
             <div style="text-align:center;">
                 <p-button [disabled]="loginForm.invalid" type="submit" class="btn btn-style">Login</p-button>

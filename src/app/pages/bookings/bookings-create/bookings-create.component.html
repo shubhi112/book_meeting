@@ -14,9 +14,12 @@
 
         <div style="margin-bottom: 10px;">
             <div style="display: flex;">
-                <p-calendar formControlName="date" dateFormat="dd/mm/yy"></p-calendar>
-                <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="date" dateFormat="dd/mm/yy" [minDate]="minDate" [maxDate]="minDate"
+                    [readonlyInput]="true"></p-calendar>
+                <p-calendar formControlName="startTime" [showTime]="true" [timeOnly]="true"
+                    [minDate]="minDate"></p-calendar>
+                <p-calendar formControlName="endTime" [showTime]="true" [timeOnly]="true"
+                    [minDate]="minDate"></p-calendar>
             </div>
             <div class="err-msg" *ngIf="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched"
                 style="margin-top: 5px;">
@@ -66,67 +69,4 @@
         <button pButton [disabled]="bookingForm.invalid" type="submit" label="Book Meeting"
             style="margin-top: 10px;"></button>
     </form>
-
-
 </p-dialog>
-<div>
-    <p-card header="Your Booking Details">
-        <div style="text-align: center;" *ngIf="userBookings?.length == 0">
-            No bookings available. Add new booking :)
-        </div>
-        <p-table *ngIf="userBookings?.length > 0" [value]="userBookings" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Username</th>
-                    <th>Agenda</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Room</th>
-                    <th>Actions</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-booking>
-                <tr>
-                    <td>{{ booking.id }}</td>
-                    <td>{{ booking.username }}</td>
-                    <td>{{ booking.agenda }}</td>
-                    <td>{{ booking.date | date }}</td>
-                    <td>{{ booking.startTime | timeFormat}} - {{ booking.endTime | timeFormat }}</td>
-                    <td>{{ booking.roomNo }}</td>
-                    <td><p-button label="Delete" [text]="true" severity="danger"
-                            (click)="deleteBooking(booking.id)"></p-button></td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-card>
-</div>
-<div>
-    <p-card header="Room Booking Details">
-        <div style="text-align: center;" *ngIf="bookings?.length == 0">
-            No bookings available. Add new booking :)
-        </div>
-        <p-table *ngIf="bookings?.length > 0" [value]="bookings" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Username</th>
-                    <th>Agenda</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Room</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-booking>
-                <tr>
-                    <td>{{ booking.id }}</td>
-                    <td>{{ booking.username }}</td>
-                    <td>{{ booking.agenda }}</td>
-                    <td>{{ booking.date | date }}</td>
-                    <td>{{ booking.startTime | timeFormat}} - {{ booking.endTime | timeFormat }}</td>
-                    <td>{{ booking.roomNo }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </p-card>
-</div>

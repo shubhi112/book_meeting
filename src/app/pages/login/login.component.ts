@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -23,10 +24,9 @@ export class LoginComponent implements OnInit {
       const { username, password } = this.loginForm.value;
       console.log(this.loginForm.value)
       if (this.authService.login(username, password)) {
-        console.log("yes")
         this.router.navigate(['/booking']);
       } else {
-        console.log("Failed to login")
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please use given credentials!' });
       }
     }
   }
